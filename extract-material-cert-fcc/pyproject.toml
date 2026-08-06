@@ -1,0 +1,20 @@
+[project]
+name = "extract-material-cert-fcc"
+version = "0.1.0"
+description = "Material certification OCR extraction and report pipeline."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "oracledb>=4.0.2",
+    "pandas>=3.0.3",
+    "pdf2image>=1.17.0",
+    "pypdf>=6.13.3",
+    "pytesseract>=0.3.13",
+    "shared-config",
+    "shared-utils",
+    "sqlalchemy>=2.0.51",
+]
+
+[tool.uv.sources]
+shared-utils = { workspace = true }
+shared-config = { workspace = true }
