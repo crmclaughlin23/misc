@@ -1,82 +1,72 @@
-PS C:\analytics-work> $env:GIT_CURL_VERBOSE=1
-PS C:\analytics-work> git push crm
-warning: use of unencrypted HTTP remote URLs is not recommended; see https://aka.ms/gcm/unsaferemotes for more information.
-12:50:30.271039 http.c:968              == Info: Could not find host github.com in the .netrc file; using defaults
-12:50:30.299453 http.c:968              == Info: Host westproxy.northgrum.com:80 was resolved.
-12:50:30.299453 http.c:968              == Info: IPv6: (none)
-12:50:30.299453 http.c:968              == Info: IPv4: 157.127.100.11, 157.127.100.10
-12:50:30.300453 http.c:968              == Info:   Trying 157.127.100.11:80...
-12:50:30.346989 http.c:968              == Info: CONNECT: no ALPN negotiated
-12:50:30.346989 http.c:968              == Info: allocate connect buffer
-12:50:30.346989 http.c:968              == Info: Establish HTTP proxy tunnel to github.com:443
-12:50:30.347990 http.c:915              => Send header, 0000000121 bytes (0x00000079)
-12:50:30.347990 http.c:927              => Send header: CONNECT github.com:443 HTTP/1.1
-12:50:30.347990 http.c:927              => Send header: Host: github.com:443
-12:50:30.347990 http.c:927              => Send header: User-Agent: git/2.54.0.windows.1
-12:50:30.347990 http.c:927              => Send header: Proxy-Connection: Keep-Alive
-12:50:30.347990 http.c:927              => Send header:
-12:50:30.450515 http.c:915              <= Recv header, 0000000044 bytes (0x0000002c)
-12:50:30.450515 http.c:927              <= Recv header: HTTP/1.1 407 Proxy Authentication Required
-12:50:30.450515 http.c:915              <= Recv header, 0000000031 bytes (0x0000001f)
-12:50:30.450515 http.c:927              <= Recv header: Proxy-Authenticate: NEGOTIATE
-12:50:30.455522 http.c:915              <= Recv header, 0000000026 bytes (0x0000001a)
-12:50:30.455522 http.c:927              <= Recv header: Proxy-Authenticate: NTLM
-12:50:30.479171 http.c:915              <= Recv header, 0000000047 bytes (0x0000002f)
-12:50:30.479171 http.c:927              <= Recv header: Proxy-Authenticate: BASIC realm="NG_AD_Group"
-12:50:30.479171 http.c:915              <= Recv header, 0000000025 bytes (0x00000019)
-12:50:30.480185 http.c:927              <= Recv header: Cache-Control: no-cache
-12:50:30.480185 http.c:915              <= Recv header, 0000000018 bytes (0x00000012)
-12:50:30.480185 http.c:927              <= Recv header: Pragma: no-cache
-12:50:30.481172 http.c:915              <= Recv header, 0000000021 bytes (0x00000015)
-12:50:30.481172 http.c:927              <= Recv header: X-XSS-Protection: 1
-12:50:30.481172 http.c:915              <= Recv header, 0000000040 bytes (0x00000028)
-12:50:30.481172 http.c:927              <= Recv header: Content-Type: text/html; charset=utf-8
-12:50:30.482199 http.c:915              <= Recv header, 0000000025 bytes (0x00000019)
-12:50:30.482199 http.c:927              <= Recv header: Proxy-Connection: close
-12:50:30.482199 http.c:915              <= Recv header, 0000000019 bytes (0x00000013)
-12:50:30.482199 http.c:927              <= Recv header: Connection: close
-12:50:30.483198 http.c:915              <= Recv header, 0000000021 bytes (0x00000015)
-12:50:30.483198 http.c:927              <= Recv header: Content-Length: 896
-12:50:30.483198 http.c:915              <= Recv header, 0000000002 bytes (0x00000002)
-12:50:30.483198 http.c:927              <= Recv header:
-12:50:30.483198 http.c:968              == Info: Ignore 896 bytes of response-body
-12:50:30.487456 http.c:968              == Info: Connect me again please
-12:50:30.488480 http.c:968              == Info:   Trying 157.127.100.11:80...
-12:50:30.545684 http.c:968              == Info: InitializeSecurityContext failed: SEC_E_NO_CREDENTIALS (0x8009030e) - No credentials are available in the security package
-12:50:30.546692 http.c:968              == Info: Proxy auth using Negotiate with user 'M67743'
-12:50:30.546692 http.c:968              == Info: Establish HTTP proxy tunnel to github.com:443
-12:50:30.547682 http.c:915              => Send header, 0000000121 bytes (0x00000079)
-12:50:30.547682 http.c:927              => Send header: CONNECT github.com:443 HTTP/1.1
-12:50:30.547682 http.c:927              => Send header: Host: github.com:443
-12:50:30.547682 http.c:927              => Send header: User-Agent: git/2.54.0.windows.1
-12:50:30.547682 http.c:927              => Send header: Proxy-Connection: Keep-Alive
-12:50:30.548683 http.c:927              => Send header:
-12:50:30.582861 http.c:915              <= Recv header, 0000000044 bytes (0x0000002c)
-12:50:30.582861 http.c:927              <= Recv header: HTTP/1.1 407 Proxy Authentication Required
-12:50:30.582861 http.c:915              <= Recv header, 0000000031 bytes (0x0000001f)
-12:50:30.583862 http.c:927              <= Recv header: Proxy-Authenticate: NEGOTIATE
-12:50:30.588851 http.c:968              == Info: InitializeSecurityContext failed: SEC_E_NO_CREDENTIALS (0x8009030e) - No credentials are available in the security package
-12:50:30.588851 http.c:915              <= Recv header, 0000000026 bytes (0x0000001a)
-12:50:30.588851 http.c:927              <= Recv header: Proxy-Authenticate: NTLM
-12:50:30.589849 http.c:915              <= Recv header, 0000000047 bytes (0x0000002f)
-12:50:30.589849 http.c:927              <= Recv header: Proxy-Authenticate: BASIC realm="NG_AD_Group"
-12:50:30.589849 http.c:915              <= Recv header, 0000000025 bytes (0x00000019)
-12:50:30.589849 http.c:927              <= Recv header: Cache-Control: no-cache
-12:50:30.589849 http.c:915              <= Recv header, 0000000018 bytes (0x00000012)
-12:50:30.589849 http.c:927              <= Recv header: Pragma: no-cache
-12:50:30.589849 http.c:915              <= Recv header, 0000000021 bytes (0x00000015)
-12:50:30.589849 http.c:927              <= Recv header: X-XSS-Protection: 1
-12:50:30.590857 http.c:915              <= Recv header, 0000000040 bytes (0x00000028)
-12:50:30.590857 http.c:927              <= Recv header: Content-Type: text/html; charset=utf-8
-12:50:30.590857 http.c:915              <= Recv header, 0000000025 bytes (0x00000019)
-12:50:30.590857 http.c:927              <= Recv header: Proxy-Connection: close
-12:50:30.590857 http.c:915              <= Recv header, 0000000019 bytes (0x00000013)
-12:50:30.590857 http.c:927              <= Recv header: Connection: close
-12:50:30.591857 http.c:915              <= Recv header, 0000000021 bytes (0x00000015)
-12:50:30.591857 http.c:927              <= Recv header: Content-Length: 896
-12:50:30.591857 http.c:915              <= Recv header, 0000000002 bytes (0x00000002)
-12:50:30.591857 http.c:927              <= Recv header:
-12:50:30.591857 http.c:968              == Info: CONNECT tunnel failed, response 407
-12:50:30.591857 http.c:968              == Info: closing connection #0
-fatal: unable to access 'https://github.com/crmclaughlin23/analytics-work.git/': InitializeSecurityContext failed: SEC_E_NO_CREDENTIALS (0x8009030e) - No credentials are available in the security package
+PS C:\analytics-work> klist
+
+Current LogonId is 0:0x3b1eb2
+
+Cached Tickets: (6)
+
+#0>     Client: M67743 @ NORTHGRUM.COM
+        Server: krbtgt/NORTHGRUM.COM @ NORTHGRUM.COM
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40810000 -> forwardable renewable name_canonicalize
+        Start Time: 8/7/2026 12:24:58 (local)
+        End Time:   8/7/2026 22:24:44 (local)
+        Renew Time: 8/14/2026 12:24:44 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0x1 -> PRIMARY
+        Kdc Called: NG-UT02-DC01.northgrum.com
+
+#1>     Client: M67743 @ NORTHGRUM.COM
+        Server: cifs/ut02sf6 @ NORTHGRUM.COM
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40810000 -> forwardable renewable name_canonicalize
+        Start Time: 8/7/2026 12:45:44 (local)
+        End Time:   8/7/2026 22:24:44 (local)
+        Renew Time: 8/14/2026 12:24:44 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0x40 -> FAST
+        Kdc Called: NG-UT02-DC01.northgrum.com
+
+#2>     Client: M67743 @ NORTHGRUM.COM
+        Server: HTTP/centralproxy.northgrum.com @ NORTHGRUM.COM
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40810000 -> forwardable renewable name_canonicalize
+        Start Time: 8/7/2026 12:26:23 (local)
+        End Time:   8/7/2026 22:24:44 (local)
+        Renew Time: 8/14/2026 12:24:44 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0x40 -> FAST
+        Kdc Called: NG-UT02-DC01.northgrum.com
+
+#3>     Client: M67743 @ NORTHGRUM.COM
+        Server: LDAP/NG-UT02-DC01.northgrum.com/northgrum.com @ NORTHGRUM.COM
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40850000 -> forwardable renewable ok_as_delegate name_canonicalize
+        Start Time: 8/7/2026 12:25:20 (local)
+        End Time:   8/7/2026 22:24:44 (local)
+        Renew Time: 8/14/2026 12:24:44 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0x40 -> FAST
+        Kdc Called: NG-UT02-DC01.northgrum.com
+
+#4>     Client: M67743 @ NORTHGRUM.COM
+        Server: cifs/ite04020542 @ NORTHGRUM.COM
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40810000 -> forwardable renewable name_canonicalize
+        Start Time: 8/7/2026 12:24:58 (local)
+        End Time:   8/7/2026 22:24:44 (local)
+        Renew Time: 8/14/2026 12:24:44 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0x40 -> FAST
+        Kdc Called: NG-UT02-DC01.northgrum.com
+
+#5>     Client: M67743 @ NORTHGRUM.COM
+        Server: cifs/ITE00612288.northgrum.com @ NORTHGRUM.COM
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40810000 -> forwardable renewable name_canonicalize
+        Start Time: 8/7/2026 12:24:58 (local)
+        End Time:   8/7/2026 22:24:44 (local)
+        Renew Time: 8/14/2026 12:24:44 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0x40 -> FAST
+        Kdc Called: NG-UT02-DC01.northgrum.com
 PS C:\analytics-work>
