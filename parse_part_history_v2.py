@@ -5,7 +5,7 @@ Sheet layout:
   - Row 1  : Panel Name        (columns C.. = one column per panel)
   - Row 2  : Design or PN
   - Row 3  : WOSN
-  - Rows 4-175 : attribute rows, organized into sections. A row is a
+  - Rows 4-N (last row with a column-B label) : attribute rows, organized into sections. A row is a
     SECTION HEADER if its column-B cell is bold + font size >= 14. Everything
     below a header, until the next header, belongs to that section. Some
     header rows *also* carry a value themselves (e.g. "CPT",
@@ -39,7 +39,6 @@ SHEET = "Part History"
 LABEL_COL = 2
 FIRST_PANEL_COL = 3
 FIRST_DATA_ROW = 2
-LAST_DATA_ROW = 175
 
 
 def _is_section_header(cell) -> bool:
@@ -62,7 +61,7 @@ def _build_row_schema(ws) -> list[dict]:
     phase = "Spec"
     occurrence = {}  # (phase, section, field) -> count seen so far
 
-    for r in range(4, LAST_DATA_ROW + 1):
+    for r in range(4, ws.max_row + 1):
         label_cell = ws.cell(r, LABEL_COL)
         label = label_cell.value
         if label is None:
@@ -169,17 +168,6 @@ def parse_part_history(path: Path = SRC, sheet: str = SHEET) -> tuple[pd.DataFra
     return long_df, wide_df
 
 
-if __name__ == "__main__":
-    long_df, wide_df = parse_part_history()
-    print("long_df:", long_df.shape)
-    dup_check = long_df.groupby(["panel_name", "col_name"]).size()
-    print("max rows per (panel, col_name) after fix:", dup_check.max())
-    print("wide_df:", wide_df.shape)
-    print(wide_df["panel_name"].tolist()[:5])
-    cure_cols = [c for c in wide_df.columns if "cure_cycle" in c.lower()]
-    print(cure_cols)
-
-
 # ---------------------------------------------------------------------------
 # SQL Server load (swap the engine builder for your shared_config.sqlserver
 # helper — left generic here since I don't have that module's signature).
@@ -203,10 +191,19 @@ def load_to_sql_server(long_df: pd.DataFrame, wide_df: pd.DataFrame, engine, sch
 # ---------------------------------------------------------------------------
 # XLSX output (in place of the SQL Server load, for now)
 # ---------------------------------------------------------------------------
-def export_to_xlsx(long_df: pd.DataFrame, wide_df: pd.DataFrame, out_path: str):
+def export_to_xlsx(long_df: pd.DataFrame, wide_df: pd.DataFrame, out_path,
+                    dim_panel: pd.DataFrame = None,
+                    dim_build_variables: pd.DataFrame = None,
+                    fact_ndi_results: pd.DataFrame = None):
     with pd.ExcelWriter(out_path, engine="openpyxl") as writer:
         long_df.to_excel(writer, sheet_name="long_data", index=False)
         wide_df.to_excel(writer, sheet_name="wide_data", index=False)
+        if dim_panel is not None:
+            dim_panel.to_excel(writer, sheet_name="dim_panel", index=False)
+        if dim_build_variables is not None:
+            dim_build_variables.to_excel(writer, sheet_name="dim_build_variables", index=False)
+        if fact_ndi_results is not None:
+            fact_ndi_results.to_excel(writer, sheet_name="fact_ndi_results", index=False)
 
 
 # ---------------------------------------------------------------------------
@@ -304,3 +301,68 @@ def classify_ndi(long_df: pd.DataFrame) -> pd.DataFrame:
         })
 
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------------------
+# Dimension / fact split for Power BI (dim_panel, dim_build_variables,
+# fact_ndi_results) -- built from wide_df's columns, not a re-parse.
+# ---------------------------------------------------------------------------
+BUILD_VARIABLE_COLS = [
+    "Spec__Heated_Debulk_1_Cycle__Heated_Debulk_1_Cycle",
+    "Spec__Heated_Debulk_2_Cycle__Heated_Debulk_2_Cycle",
+    "Spec__Imidization_Cycle__Imidization_Cycle",
+    "Spec__Cure_Cycle__Cure_Cycle",
+    "Spec__Material__Material_A50TF294CLA_60IN",
+    "Actual__Cure_Bag__Cure_Bag",
+]
+
+RESULT_COLS = [
+    "Spec__CPT__CPT",
+    "Spec__Testing__Density_1_74_1_83g_cc",   # acid digest SG
+    "Spec__Testing__Resin_28_0_36_0pct",      # acid digest Resin
+    "Spec__Testing__Fiber_54_0_62_0pct",      # acid digest Fiber
+    "Spec__Testing__Void_0_3_0pct",           # acid digest Void
+]
+
+
+def build_star_schema(long_df: pd.DataFrame, wide_df: pd.DataFrame):
+    """
+    Returns (dim_panel, dim_build_variables, fact_ndi_results).
+    Splits wide_df's columns apart -- does not re-parse or re-derive
+    anything. porosity_ndi / void_ndi / delam_ndi come from classify_ndi()
+    and are left-joined onto fact_ndi_results, so panels with no PMG /
+    Pass-Fail text come through with NaN there (9 of 62, as of the source
+    file this was built against) -- that's expected, not a bug.
+    """
+    missing = [c for c in BUILD_VARIABLE_COLS + RESULT_COLS if c not in wide_df.columns]
+    if missing:
+        raise KeyError(f"wide_df is missing expected columns (sheet layout changed?): {missing}")
+
+    dim_panel = wide_df[["panel_id", "panel_name", "wosn", "design_or_pn"]].copy()
+
+    dim_build_variables = wide_df[["panel_id"] + BUILD_VARIABLE_COLS].copy()
+
+    ndi = classify_ndi(long_df)
+    fact_ndi_results = wide_df[["panel_id"] + RESULT_COLS].merge(
+        ndi[["panel_id", "porosity_ndi", "void_ndi", "delam_ndi"]],
+        on="panel_id", how="left",
+    )
+
+    return dim_panel, dim_build_variables, fact_ndi_results
+
+
+# ---------------------------------------------------------------------------
+# Run the full pipeline and write the xlsx
+# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    long_df, wide_df = parse_part_history()
+    dim_panel, dim_build_variables, fact_ndi_results = build_star_schema(long_df, wide_df)
+
+    DEST = Path.cwd().parent / "output"
+    DEST.mkdir(parents=True, exist_ok=True)
+    export_to_xlsx(
+        long_df, wide_df,
+        DEST / "part_history_export.xlsx",
+        dim_panel, dim_build_variables, fact_ndi_results,
+    )
+    print(f"Wrote {DEST / 'part_history_export.xlsx'}")
