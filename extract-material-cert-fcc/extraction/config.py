@@ -13,8 +13,8 @@ SHAREPOINT_URL = (
     'Shared%20Documents/General/FCC%20Pre%20Cure/MaterialLotData/CertDataFiles'
 )
 
-POPPLER_PATH = r'C:\Users\M67743\AppData\Local\poppler\poppler-26.02.0\Library\bin'
-TESSERACT_PATH = r'C:\Users\M67743\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
+POPPLER_PATH = r'C:\Program Files\poppler\Library\bin'
+TESSERACT_PATH = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 LOW_DPI = 160
 HIGH_DPI = 275
