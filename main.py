@@ -92,7 +92,12 @@ def main():
             fields = json.load(f)
 
         # Build internal_name -> (display_name, type) mapping from the schema
-        field_map = {f['InternalName']: (f['Title'], f['TypeAsString']) for f in fields}
+        SKIP_TYPES = {'Computed'}
+        field_map = {
+            f['InternalName']: (f['Title'], f['TypeAsString']) 
+            for f in fields
+            if f['TypeAsString'] not in SKIP_TYPES
+        }
 
         # Keep the following excluded fields
         field_map.setdefault('ID', ('ID', 'Counter'))
